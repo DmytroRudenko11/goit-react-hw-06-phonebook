@@ -1,34 +1,34 @@
 import { useState } from 'react';
-import { nanoid } from 'nanoid';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/actions';
+import { toast } from 'react-toastify';
 
-export function Form({ onSubmit, onMatch }) {
-  const [id, setId] = useState(null);
-  const [name, setName] = useState('');
+export function Form() {
+  const [nameForm, setNameForm] = useState('');
   const [number, setNumber] = useState('');
+  const { contacts } = useSelector(state => state.phonebook);
 
-  function reset() {
-    setId(null);
-    setName('');
-    setNumber('');
-  }
+  const handleMatch = valueToCheck => {
+    const arrayOfNames = contacts.map(({ name }) => name);
+    return arrayOfNames.includes(valueToCheck);
+  };
+
+  const dispatch = useDispatch();
 
   const handleSubmit = e => {
     e.preventDefault();
-
-    if (onMatch(name)) {
-      reset();
-
-      return alert(`${name} is alreadry in your contacts list`);
+    if (handleMatch(nameForm)) {
+      return toast.info(`${nameForm} is already in your contact list`);
     }
-
-    const contact = { id, number, name };
-
-    onSubmit(contact);
-
+    dispatch(addContact(nameForm, number));
     reset();
   };
+
+  function reset() {
+    setNameForm('');
+    setNumber('');
+  }
 
   const handleChangeInput = e => {
     const inputName = e.target.name;
@@ -36,7 +36,7 @@ export function Form({ onSubmit, onMatch }) {
 
     switch (inputName) {
       case 'name':
-        setName(inputValue);
+        setNameForm(inputValue);
         break;
       case 'number':
         setNumber(inputValue);
@@ -44,7 +44,6 @@ export function Form({ onSubmit, onMatch }) {
       default:
         return;
     }
-    setId(nanoid());
   };
 
   return (
@@ -55,7 +54,7 @@ export function Form({ onSubmit, onMatch }) {
           onChange={handleChangeInput}
           type="text"
           placeholder="Add your contact"
-          value={name}
+          value={nameForm}
           name="name"
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
@@ -80,11 +79,6 @@ export function Form({ onSubmit, onMatch }) {
     </AppForm>
   );
 }
-
-Form.propTypes = {
-  onMatch: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-};
 
 const AppForm = styled.form`
   display: flex;

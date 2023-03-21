@@ -1,23 +1,33 @@
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addFilter } from 'redux/actions';
 
-export function SearchField({ onSearch }) {
+export function SearchField() {
+  const [value, setValue] = useState('');
+  const dispatch = useDispatch();
+
   function onSearchInput(e) {
-    onSearch(e.target.value);
+    setValue(e.target.value);
   }
+
   return (
     <SearchBox>
       <LabelForm>
         Find contacts by name
-        <InputForm type="text" name="name" onChange={onSearchInput} />
+        <InputForm
+          type="text"
+          name="name"
+          onChange={e => {
+            onSearchInput(e);
+            dispatch(addFilter(e.target.value));
+          }}
+          value={value}
+        />
       </LabelForm>
     </SearchBox>
   );
 }
-
-SearchField.propTypes = {
-  onSearch: PropTypes.func.isRequired,
-};
 
 const SearchBox = styled.div`
   display: flex;

@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
-import { ContactList } from './ContactList/ContactList';
-import { Form } from './Form/Form';
-import { SearchField } from './SearchField/SearchField';
-import { INITIAL_LIST } from 'initalData/initialData';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
+
+import { INITIAL_LIST } from 'initalData/initialData';
+import { Form } from './Form/Form';
+import { ContactList } from './ContactList/ContactList';
+import { SearchField } from './SearchField/SearchField';
 
 const getDefaultContacts = () => {
   const prevSessionData = JSON.parse(localStorage.getItem('contacts'));
@@ -15,47 +17,14 @@ const getDefaultContacts = () => {
 };
 
 export function App() {
-  const [contacts, setContacts] = useState(getDefaultContacts);
-  const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
-
-  const handleMatch = name => {
-    const arrayOfNames = contacts.map(({ name }) => name);
-    return arrayOfNames.includes(name);
-  };
-
-  const handleSubmit = name => {
-    setContacts([...contacts, name]);
-  };
-
-  const handleSearchField = name => {
-    setFilter(name);
-  };
-
-  const handleDelete = id => {
-    setContacts(contacts.filter(contact => contact.id !== id));
-  };
-
-  const applyFilter = () => {
-    return contacts.filter(user =>
-      user.name.toLowerCase().includes(filter.toLowerCase())
-    );
-  };
-
   return (
     <Wrapper>
       <AppHeader>Phonebook</AppHeader>
-      <Form onSubmit={handleSubmit} onMatch={handleMatch} contacts={contacts} />
+      <Form />
       <ListHeader>Contacts</ListHeader>
-      <SearchField onSearch={handleSearchField} />
-      <ContactList
-        onSearch={handleSearchField}
-        data={applyFilter()}
-        onDelete={handleDelete}
-      />
+      <SearchField />
+      <ContactList />
+      <ToastContainer />
     </Wrapper>
   );
 }

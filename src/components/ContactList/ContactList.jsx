@@ -1,17 +1,19 @@
 import { Item } from 'components/Item/Item';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { applyFilter } from 'redux/selector';
 
-export function ContactList({ data, onDelete }) {
+export function ContactList() {
+  const filteredContacts = useSelector(state => applyFilter(state));
+
   return (
     <List>
-      {data.length !== 0 ? (
-        data.map(contact => (
+      {filteredContacts.length !== 0 ? (
+        filteredContacts.map(contact => (
           <Item
             key={contact.id}
             name={contact.name}
             number={contact.number}
-            onDelete={onDelete}
             id={contact.id}
           />
         ))
@@ -22,17 +24,17 @@ export function ContactList({ data, onDelete }) {
   );
 }
 
-ContactList.propTypes = {
-  onDelete: PropTypes.func.isRequired,
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-      onDelete: PropTypes.func,
-    })
-  ).isRequired,
-};
+// ContactList.propTypes = {
+//   onDelete: PropTypes.func.isRequired,
+//   data: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       id: PropTypes.string.isRequired,
+//       name: PropTypes.string.isRequired,
+//       number: PropTypes.string.isRequired,
+//       onDelete: PropTypes.func,
+//     })
+//   ).isRequired,
+// };
 
 const List = styled.ul`
   display: flex;
