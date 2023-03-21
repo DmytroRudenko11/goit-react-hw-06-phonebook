@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/actions';
 import { toast } from 'react-toastify';
+
+import { addContact } from 'redux/contactsSlice';
 
 export function Form() {
   const [nameForm, setNameForm] = useState('');
