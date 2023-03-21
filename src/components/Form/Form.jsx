@@ -19,6 +19,7 @@ export function Form() {
   const handleSubmit = e => {
     e.preventDefault();
     if (handleMatch(nameForm)) {
+      reset();
       return toast.info(`${nameForm} is already in your contact list`);
     }
     dispatch(addContact(nameForm, number));

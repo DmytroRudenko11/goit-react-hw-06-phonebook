@@ -1,16 +1,6 @@
-import { createStore } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { contactsReducer } from './reducer';
 
-import { devToolsEnhancer } from '@redux-devtools/extension';
-import { rootReducer } from './rootReducer';
-import { INITIAL_LIST } from 'initalData/initialData';
-
-export const initialState = {
-  phonebook: {
-    contacts: INITIAL_LIST,
-    filters: '',
-  },
-};
-
-const enhancer = devToolsEnhancer();
-
-export const store = createStore(rootReducer, initialState, enhancer);
+export const store = configureStore({
+  reducer: { phonebook: contactsReducer },
+});
