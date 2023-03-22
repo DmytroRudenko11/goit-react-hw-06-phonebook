@@ -2,19 +2,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
 
-import { INITIAL_LIST } from 'initalData/initialData';
 import { Form } from './Form/Form';
 import { ContactList } from './ContactList/ContactList';
 import { SearchField } from './SearchField/SearchField';
-
-const getDefaultContacts = () => {
-  const prevSessionData = JSON.parse(localStorage.getItem('contacts'));
-
-  if (prevSessionData !== null) {
-    return prevSessionData;
-  }
-  return INITIAL_LIST;
-};
 
 export function App() {
   return (
